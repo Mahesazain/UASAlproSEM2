@@ -195,9 +195,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Mahesa - [@twitter_handle](https://twitter.com/Mahesazain)
+Fersya - [@twitter_handle](https://twitter.com/fersya_zufar)
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/github_username/repo_name]([https://github.com/github_username/repo_name](https://github.com/Mahesazain/UASAlproSEM2))
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

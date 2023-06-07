@@ -195,7 +195,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Mahesa - [@mahesazan_](https://twitter.com/mahesazain_)
+Mahesa - [@mahesazain_](https://twitter.com/mahesazain_)
 Fersya - [@fersya_zufar](https://twitter.com/fersya_zufar)
 
 Project Link: [https://github.com/github_username/repo_name]([https://github.com/github_username/repo_name](https://github.com/Mahesazain/UASAlproSEM2))

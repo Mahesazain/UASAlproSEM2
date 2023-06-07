@@ -1,6 +1,7 @@
-# Project Title
+# Aplikasi Perpustakaan
 
-Aplikasi Perpustakaan
+just an app for a library Admin
+this is our final assignment for our class
 
 ## Description
 

@@ -15,8 +15,6 @@ type borrowed struct {
 	namaPeminjam string
 	pinjam       bool
 	count        int
-	tglPinjam    int
-	tglKembali   int
 }
 
 type arrPerpus [NMAX]book
@@ -24,7 +22,7 @@ type arrPerpus [NMAX]book
 func addBooks(T *arrPerpus) {
 	var tempCategory, tempTitle string
 	var numBooks, emptySlot int     // Keep track of the number of books added
-	var stop bool = false           // Use a flag to exit the loop when necessary and check if the array slot is empty
+	var stop bool = false           // Use a flag to exit the loop when necessaryf
 	var foundEmptySlot bool = false // for some reason i can't put these 2 bool into one even tho it has the same value which is false
 	fmt.Println("Notes jika ingin memiliki spasi di nama buku dan kategori mohon memakai '_' ")
 	fmt.Println("dan jika ingin berhenti menambahkan buku tulis 'STOP' ")
@@ -155,92 +153,6 @@ func SearchCategory(T arrPerpus, kategori string) {
 	}
 }
 
-func borrowBook(T *arrPerpus, id int) {
-	var found bool = false
-	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
-		if T[i].kodeBuku == id {
-			found = true
-			if T[i].peminjaman.pinjam == false {
-				T[i].peminjaman.pinjam = true
-				T[i].peminjaman.count++
-				fmt.Println("= = = = =")
-				fmt.Print("Nama peminjam: ")
-				fmt.Scanln(&T[i].peminjaman.namaPeminjam)
-				fmt.Println("Buku berhasil dipinjam.")
-			} else {
-				fmt.Println("= = = = =")
-				fmt.Println("Buku tidak dapat dipinjam karena sedang dipinjam.")
-			}
-		}
-	}
-	if !found {
-		fmt.Println("= = = = =")
-		fmt.Println("ID buku tidak ditemukan.")
-	}
-}
-
-func returnBook(T *arrPerpus, id int) {
-	var found bool = false
-	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
-		if T[i].kodeBuku == id {
-			found = true
-			if T[i].peminjaman.pinjam == true {
-				T[i].peminjaman.pinjam = false
-
-				fmt.Println("= = = = =")
-				fmt.Println("Tanggal pengembalian buku:")
-				fmt.Scanln(&T[i].peminjaman.tglKembali)
-				if T[i].peminjaman.tglKembali > T[i].peminjaman.tglPinjam+7 {
-					// Calculate late return fine
-					fine := (T[i].peminjaman.tglKembali - (T[i].peminjaman.tglPinjam + 7)) * 2000
-					fmt.Println("Denda keterlambatan:", fine)
-				}
-				fmt.Println("Terima kasih telah mengembalikan bukunya.")
-			} else {
-				fmt.Println("= = = = =")
-				fmt.Println("Buku tidak sedang dipinjam.")
-			}
-		}
-	}
-	if !found {
-		fmt.Println("= = = = =")
-		fmt.Println("ID buku tidak ditemukan.")
-	}
-}
-
-func listBorrowed(T arrPerpus) {
-	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
-		if T[i].peminjaman.pinjam == true {
-			fmt.Println("Judul:", T[i].namaBuku, "Dipinjam oleh:", T[i].peminjaman.namaPeminjam)
-		}
-	}
-}
-
-func popularBooks(T arrPerpus) {
-	var popBooks [5]book
-	var i, j int
-
-	// Sort the books by count (most borrowed first)
-	for i = 0; i < NMAX-1; i++ {
-		for j = 0; j < NMAX-i-1; j++ {
-			if T[j].peminjaman.count < T[j+1].peminjaman.count {
-				T[j], T[j+1] = T[j+1], T[j]
-			}
-		}
-	}
-
-	// Get the top 5 most popular books
-	for i = 0; i < 5; i++ {
-		popBooks[i] = T[i]
-	}
-
-	// Print the popular books
-	fmt.Println("5 buku paling populer:")
-	for i = 0; i < 5; i++ {
-		fmt.Println(i+1, ". Judul:", popBooks[i].namaBuku, "Jumlah peminjaman:", popBooks[i].peminjaman.count)
-	}
-}
-
 func menu() {
 	var T1 arrPerpus
 	var input int
@@ -254,10 +166,6 @@ func menu() {
 		fmt.Println("3. List Books")
 		fmt.Println("4. Search using category")
 		fmt.Println("5. Exit")
-		fmt.Println("6. Borrow Book")
-		fmt.Println("7. Return Book")
-		fmt.Println("8. List Borrowed Books")
-		fmt.Println("9. Popular Books")
 		fmt.Println("= = = = =")
 
 		fmt.Scanln(&input)
@@ -281,22 +189,6 @@ func menu() {
 			fmt.Println("= = = = =")
 			fmt.Println("GBIN")
 			return
-		} else if input == 6 {
-			fmt.Println("= = = = =")
-			fmt.Print("Masukan ID buku untuk meminjam: ")
-			fmt.Scanln(&input)
-			borrowBook(&T1, input)
-		} else if input == 7 {
-			fmt.Println("= = = = =")
-			fmt.Print("Masukan ID buku untuk dikembalikan: ")
-			fmt.Scanln(&input)
-			returnBook(&T1, input)
-		} else if input == 8 {
-			fmt.Println("= = = = =")
-			listBorrowed(T1)
-		} else if input == 9 {
-			fmt.Println("= = = = =")
-			popularBooks(T1)
 		}
 	}
 }

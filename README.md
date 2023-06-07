@@ -15,7 +15,7 @@ Just our Finals Assignment
 
 ## License
 
-This project is licensed under the [YoMama] License - see the LICENSE.md file for details
+This project is licensed under the YoMama License - see the LICENSE.md file for details
 
 ## Acknowledgments
 i just wanna sleep

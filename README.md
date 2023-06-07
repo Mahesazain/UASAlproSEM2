@@ -12,7 +12,7 @@ Just our Finals Assignment
 
 
 [Fersya](https://github.com/zfersya)
-[Mahesa](https://github.com/Mahesazain)
+& [Mahesa](https://github.com/Mahesazain)
 
 ## License
 

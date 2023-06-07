@@ -11,8 +11,8 @@ Just our Finals Assignment
 ## Authors
 
 
-[@fersya_zurfar](https://twitter.com/fersya_zufar)
-[@mahesazain](https://twitter.com/mahesazain_)
+[@fersya_zurfar](https://github.com/zfersya)
+[@mahesazain](https://github.com/Mahesazain)
 
 ## License
 

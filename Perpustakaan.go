@@ -368,7 +368,7 @@ func returnBook(T *arrPerpus) {
 func listBorrowed(T arrPerpus) {
 	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].peminjaman.pinjam == true {
-			fmt.Println("Judul:", T[i].namaBuku, "Dipinjam oleh:", T[i].peminjaman.namaPeminjam)
+			fmt.Println("Judul:", T[i].namaBuku, "Dipinjam oleh:", T[i].peminjaman.namaPeminjam, "Dengan ID buku: ", T[i].kodeBuku, "Pada: ", T[i].peminjaman.tglPinjam)
 		}
 	}
 }

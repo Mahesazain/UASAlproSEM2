@@ -15,8 +15,8 @@ type borrowed struct {
 	namaPeminjam string
 	pinjam       bool
 	count        int
-	hariPinjam   int
-	hariKembali  int
+	tglPinjam    int
+	tglKembali   int
 }
 
 type arrPerpus [NMAX]book
@@ -240,7 +240,7 @@ func borrowBook(T *arrPerpus, id int) {
 				fmt.Print("Nama peminjam: ")
 				fmt.Scanln(&T[i].peminjaman.namaPeminjam)
 				fmt.Print("Jumlah hari pinjam: ")
-				fmt.Scanln(&T[i].peminjaman.hariPinjam)
+				fmt.Scanln(&T[i].peminjaman.tglPinjam)
 				fmt.Println("Buku berhasil dipinjam.")
 			} else {
 				fmt.Println("= = = = =")
@@ -274,11 +274,11 @@ func returnBook(T *arrPerpus) {
 				var daysLate int
 				fmt.Scanln(&daysLate)
 
-				T[i].peminjaman.hariKembali = T[i].peminjaman.hariPinjam + daysLate
+				T[i].peminjaman.tglKembali = T[i].peminjaman.tglPinjam + daysLate
 
-				if T[i].peminjaman.hariKembali > T[i].peminjaman.hariPinjam+7 {
+				if T[i].peminjaman.tglKembali > T[i].peminjaman.tglPinjam+7 {
 					// Calculate late return fine
-					fine := (T[i].peminjaman.hariKembali - (T[i].peminjaman.hariPinjam + 7)) * 2000
+					fine := (T[i].peminjaman.tglKembali - (T[i].peminjaman.tglPinjam + 7)) * 2000
 					fmt.Println("Denda keterlambatan:", fine)
 				}
 				fmt.Println("Terima kasih telah mengembalikan bukunya.")

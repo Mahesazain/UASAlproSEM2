@@ -333,10 +333,10 @@ func menu() {
 		fmt.Println("1. Manage Books")
 		fmt.Println("2. List Books")
 		fmt.Println("3. Search using category")
-		fmt.Println("5. Borrow or Manage Books")
-		fmt.Println("6. List Borrowed Books")
-		fmt.Println("7. Popular Books")
-		fmt.Println("4. Exit")
+		fmt.Println("4. Borrow or Return Books")
+		fmt.Println("5. List Borrowed Books")
+		fmt.Println("6. Popular Books")
+		fmt.Println("7. Exit")
 		fmt.Println("= = = = =")
 
 		fmt.Scanln(&input)
@@ -354,19 +354,19 @@ func menu() {
 			SearchCategory(T1, masukan)
 		} else if input == 4 {
 			fmt.Println("= = = = =")
-			fmt.Println("Terima kasih telah menggunakan layanan perpustakaan kami.")
-			return
-		} else if input == 5 {
-			fmt.Println("= = = = =")
 			fmt.Print("Masukan ID buku: ")
 			fmt.Scanln(&input)
 			borrowOrReturnBook(&T1, input)
-		} else if input == 6 {
+		} else if input == 5 {
 			fmt.Println("= = = = =")
 			listBorrowed(T1)
-		} else if input == 7 {
+		} else if input == 6 {
 			fmt.Println("= = = = =")
 			popularBooks(T1)
+		} else if input == 7 {
+			fmt.Println("= = = = =")
+			fmt.Println("Terima kasih telah menggunakan layanan perpustakaan kami.")
+			return
 		} else {
 			fmt.Println("= = = = =")
 			fmt.Println("Maaf, pilihan tidak valid. Silakan pilih nomor dari menu.")

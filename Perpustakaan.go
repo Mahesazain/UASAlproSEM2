@@ -56,14 +56,15 @@ func manageBooks(T *arrPerpus) {
 
 func addBooks(T *arrPerpus) {
 	var tempCategory, tempTitle string
-	var numBooks, emptySlot int     // Keep track of the number of books added
-	var stop bool = false           // Use a flag to exit the loop when necessary and check if the array slot is empty
-	var foundEmptySlot bool = false // for some reason i can't put these 2 bool into one even tho it has the same value which is false
+	var numBooks, emptySlot int // Keep track of the number of books added
+	var stop bool = false       // Use a flag to exit the loop when necessary and check if the array slot is empty
+	var foundEmptySlot bool = false
+
 	fmt.Println("Notes jika ingin memiliki spasi di nama buku dan kategori mohon memakai '_' ")
 	fmt.Println("dan jika ingin berhenti menambahkan buku tulis 'STOP' ")
 
 	for i := 0; i < NMAX && !foundEmptySlot; i++ {
-		if T[i].namaBuku == "" {
+		if T[i].kodeBuku == 0 {
 			emptySlot = i
 			foundEmptySlot = true
 		}
@@ -92,7 +93,7 @@ func addBooks(T *arrPerpus) {
 
 			numBooks++
 			emptySlot++
-			for emptySlot < NMAX && T[emptySlot].namaBuku != "" {
+			for emptySlot < NMAX && T[emptySlot].kodeBuku != 0 {
 				emptySlot++
 			}
 		}
@@ -205,26 +206,19 @@ func isIDExists(T *arrPerpus, id int) bool {
 
 func deleteBook(T *arrPerpus, id int) {
 	var found bool = false
-	var i int
-	for i = 0; i < NMAX && T[i].namaBuku != ""; i++ {
+	var j int = 0
+
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].kodeBuku == id {
 			found = true
+			T[i].namaBuku = ""
+			T[i].kategori = ""
+			T[i].kodeBuku = 0
 
-			// Shift all books after the deleted book one position to the left
-			for j := i; j < NMAX-2 && T[j+1].namaBuku != ""; j++ {
+			for j = i; j < NMAX-1; j++ {
 				T[j] = T[j+1]
+				T[j].kodeBuku--
 			}
-
-			// Clear the last book in the array
-			T[NMAX-2].namaBuku = ""
-			T[NMAX-2].kodeBuku = 0
-			T[NMAX-2].kategori = ""
-
-			// Update the IDs of the remaining books in the array
-			for j := i; j < NMAX-2 && T[j].namaBuku != ""; j++ {
-				T[j].kodeBuku = j + 1
-			}
-
 			fmt.Println("= = = = =")
 			fmt.Println("Buku berhasil dihapus.")
 		}
@@ -237,14 +231,15 @@ func deleteBook(T *arrPerpus, id int) {
 }
 
 func cetakBook(T arrPerpus) {
+	fmt.Println("= = = = =")
+	fmt.Println("List of Books")
 
-	for i := 0; i < NMAX && T[i].kodeBuku != 0; i++ {
-		if T[i].namaBuku != "" && T[i].kategori != "" {
-			fmt.Println("Judul:", T[i].namaBuku, "Kategori:", T[i].kategori, "ID:", T[i].kodeBuku)
-		}
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
+		fmt.Printf("Judul: %s Kategori: %s ID: %d\n", T[i].namaBuku, T[i].kategori, T[i].kodeBuku)
 	}
 
-	if T[0].kodeBuku == 0 {
+	fmt.Println("= = = = =")
+	if T[0].namaBuku == "" {
 		fmt.Println("Tidak ada buku yang tersedia")
 	}
 }

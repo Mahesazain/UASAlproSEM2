@@ -160,11 +160,19 @@ func deleteBook(T *arrPerpus, id int) {
 			for j := i; j < NMAX-1 && T[j+1].namaBuku != ""; j++ {
 				T[j] = T[j+1]
 			}
-			T[NMAX-1] = book{} // Clear the last book
+
+			T[NMAX-1].namaBuku = ""
+			T[NMAX-1].kodeBuku = 0
+			T[NMAX-1].kategori = ""
+			T[i].kodeBuku = id
+
 			fmt.Println("= = = = =")
 			fmt.Println("Buku berhasil dihapus.")
 			for j := i; j < NMAX-1 && T[j].namaBuku != ""; j++ {
 				T[j].kodeBuku = j + 1
+			}
+			if i != NMAX-1 {
+				T[i].kodeBuku = NMAX - 1
 			}
 		}
 	}
@@ -176,14 +184,15 @@ func deleteBook(T *arrPerpus, id int) {
 }
 
 func cetakBook(T arrPerpus) {
-	var i int = 0
-	if T[i].kodeBuku == 0 {
-		fmt.Println("Tidak ada buku, Mohon untuk menambahkan buku")
-		return
-	} else {
-		for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
+
+	for i := 0; i < NMAX && T[i].kodeBuku != 0; i++ {
+		if T[i].namaBuku != "" && T[i].kategori != "" {
 			fmt.Println("Judul:", T[i].namaBuku, "Kategori:", T[i].kategori, "ID:", T[i].kodeBuku)
 		}
+	}
+
+	if T[0].kodeBuku == 0 {
+		fmt.Println("Tidak ada buku yang tersedia")
 	}
 }
 
@@ -239,8 +248,11 @@ func borrowBook(T *arrPerpus, id int) {
 				fmt.Println("= = = = =")
 				fmt.Print("Nama peminjam: ")
 				fmt.Scanln(&T[i].peminjaman.namaPeminjam)
-				fmt.Print("Jumlah hari buku yang akan dipinjam: ")
-				fmt.Scanln(&T[i].peminjaman.tglPinjam)
+				fmt.Print("Tanggal pinjam (ddmmyyyy): ")
+				var tglPinjam int
+				fmt.Scanln(&tglPinjam)
+				T[i].peminjaman.tglPinjam = tglPinjam
+				T[i].peminjaman.tglKembali = tglPinjam + 70000 // borrow for 7 days (70000 = 7 * 10000)
 				fmt.Println("Buku berhasil dipinjam.")
 			} else {
 				fmt.Println("= = = = =")
@@ -270,21 +282,22 @@ func returnBook(T *arrPerpus) {
 				T[i].peminjaman.pinjam = false
 
 				fmt.Println("= = = = =")
-				fmt.Print("Jumlah hari keterlambatan: ")
-				var daysLate int
-				fmt.Scanln(&daysLate)
+				fmt.Print("Tanggal kembali (ddmmyyyy): ")
+				var tglKembali int
+				fmt.Scanln(&tglKembali)
 
-				T[i].peminjaman.tglKembali = T[i].peminjaman.tglPinjam + daysLate
-
-				if T[i].peminjaman.tglKembali > T[i].peminjaman.tglPinjam+2 {
+				daysLate := (tglKembali - T[i].peminjaman.tglKembali) / 10000
+				if daysLate > 0 {
 					// Calculate late return fine
-					fine := (T[i].peminjaman.tglKembali - (T[i].peminjaman.tglPinjam + 2)) * 2000
-					fmt.Println("Denda keterlambatan:", fine)
+					fine := daysLate * 2000
+					if fine > 0 {
+						fmt.Println("Denda keterlambatan:", fine)
+					}
 				}
 				fmt.Println("Terima kasih telah mengembalikan bukunya.")
 			} else {
 				fmt.Println("= = = = =")
-				fmt.Println("Buku tidak sedang dipinjam.")
+				fmt.Println("Buku sedang tidak dipinjam.")
 			}
 			break
 		}

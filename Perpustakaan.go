@@ -113,9 +113,12 @@ func addBooks(T *arrPerpus) {
 }
 
 func editBook(T *arrPerpus, id int) {
-	found := false
-	var i int
-	for i = 0; i < NMAX && T[i].namaBuku != ""; i++ {
+	var found bool = false
+	var tempTitle, tempCategory string
+	var tempID int
+	var input int
+
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].kodeBuku == id {
 			found = true
 			fmt.Println("= = = = =")
@@ -125,7 +128,6 @@ func editBook(T *arrPerpus, id int) {
 			fmt.Println("ID:", T[i].kodeBuku)
 			fmt.Println("= = = = =")
 
-			var input int
 			for {
 				fmt.Println("1. Edit judul")
 				fmt.Println("2. Edit kategori")
@@ -137,9 +139,6 @@ func editBook(T *arrPerpus, id int) {
 				if input == 4 {
 					return
 				}
-
-				var tempTitle, tempCategory string
-				var tempID int
 
 				if input == 1 {
 					fmt.Println("= = = = =")
@@ -204,10 +203,8 @@ func isIDExists(T *arrPerpus, id int) bool {
 	return false
 }
 
-stylus
-
 func deleteBook(T *arrPerpus, id int) {
-	found := false
+	var found bool = false
 	var i int
 	for i = 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].kodeBuku == id {

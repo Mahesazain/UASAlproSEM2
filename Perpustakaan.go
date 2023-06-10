@@ -28,6 +28,7 @@ func manageBooks(T *arrPerpus) {
 	fmt.Println("1. Add Book")
 	fmt.Println("2. Edit Book")
 	fmt.Println("3. Delete Book")
+	fmt.Println("4. Return to menu")
 	fmt.Println("= = = = =")
 
 	fmt.Scanln(&input)
@@ -45,6 +46,8 @@ func manageBooks(T *arrPerpus) {
 		fmt.Print("Enter book ID: ")
 		fmt.Scanln(&input)
 		deleteBook(T, input)
+	} else if input == 4 {
+		return
 	} else {
 		fmt.Println("= = = = =")
 		fmt.Println("Maaf, pilihan tidak valid. Silakan pilih nomor dari menu.")
@@ -121,26 +124,58 @@ func editBook(T *arrPerpus, id int) {
 			fmt.Println("Kategori:", T[i].kategori)
 			fmt.Println("ID:", T[i].kodeBuku)
 			fmt.Println("= = = = =")
-			fmt.Println("1. Edit book details")
-			fmt.Println("2. Cancel")
-			fmt.Println("= = = = =")
-			var input int
-			fmt.Scanln(&input)
 
-			if input == 1 {
+			var input int
+			for {
+				fmt.Println("1. Edit judul")
+				fmt.Println("2. Edit kategori")
+				fmt.Println("3. Edit ID")
+				fmt.Println("4. Selesai")
+				fmt.Println("= = = = =")
+				fmt.Scanln(&input)
+
+				if input == 4 {
+					return
+				}
+
 				var tempTitle, tempCategory string
-				fmt.Println("= = = = =")
-				fmt.Print("Masukan nama buku baru: ")
-				fmt.Scanln(&tempTitle)
-				fmt.Print("Masukan kategori buku baru: ")
-				fmt.Scanln(&tempCategory)
-				T[i].namaBuku = tempTitle
-				T[i].kategori = tempCategory
-				fmt.Println("= = = = =")
-				fmt.Println("Buku berhasil diperbarui.")
-			} else {
-				fmt.Println("= = = = =")
-				fmt.Println("Buku tidak diperbarui.")
+				var tempID int
+
+				if input == 1 {
+					fmt.Println("= = = = =")
+					fmt.Print("Masukan nama buku baru: ")
+					fmt.Scanln(&tempTitle)
+					fmt.Println("= = = = =")
+					if isTitleExists(T, tempTitle) {
+						fmt.Println("Nama buku sudah ada.")
+						fmt.Println("= = = = =")
+					} else {
+						T[i].namaBuku = tempTitle
+						fmt.Println("Buku berhasil diperbarui.")
+					}
+				} else if input == 2 {
+					fmt.Println("= = = = =")
+					fmt.Print("Masukan kategori buku baru: ")
+					fmt.Scanln(&tempCategory)
+					fmt.Println("= = = = =")
+					T[i].kategori = tempCategory
+					fmt.Println("Buku berhasil diperbarui.")
+				} else if input == 3 {
+					fmt.Println("= = = = =")
+					fmt.Print("Masukan ID buku baru: ")
+					fmt.Scanln(&tempID)
+					fmt.Println("= = = = =")
+					if isIDExists(T, tempID) {
+						fmt.Println("ID buku sudah ada.")
+						fmt.Println("= = = = =")
+					} else {
+						T[i].kodeBuku = tempID
+						fmt.Println("= = = = =")
+						fmt.Println("Buku berhasil diperbarui.")
+					}
+				} else {
+					fmt.Println("Opsi tidak valid.")
+				}
 			}
 		}
 	}
@@ -151,29 +186,50 @@ func editBook(T *arrPerpus, id int) {
 	}
 }
 
+func isTitleExists(T *arrPerpus, title string) bool {
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
+		if T[i].namaBuku == title {
+			return true
+		}
+	}
+	return false
+}
+
+func isIDExists(T *arrPerpus, id int) bool {
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
+		if T[i].kodeBuku == id {
+			return true
+		}
+	}
+	return false
+}
+
+stylus
+
 func deleteBook(T *arrPerpus, id int) {
 	found := false
 	var i int
 	for i = 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].kodeBuku == id {
 			found = true
-			for j := i; j < NMAX-1 && T[j+1].namaBuku != ""; j++ {
+
+			// Shift all books after the deleted book one position to the left
+			for j := i; j < NMAX-2 && T[j+1].namaBuku != ""; j++ {
 				T[j] = T[j+1]
 			}
 
-			T[NMAX-1].namaBuku = ""
-			T[NMAX-1].kodeBuku = 0
-			T[NMAX-1].kategori = ""
-			T[i].kodeBuku = id
+			// Clear the last book in the array
+			T[NMAX-2].namaBuku = ""
+			T[NMAX-2].kodeBuku = 0
+			T[NMAX-2].kategori = ""
+
+			// Update the IDs of the remaining books in the array
+			for j := i; j < NMAX-2 && T[j].namaBuku != ""; j++ {
+				T[j].kodeBuku = j + 1
+			}
 
 			fmt.Println("= = = = =")
 			fmt.Println("Buku berhasil dihapus.")
-			for j := i; j < NMAX-1 && T[j].namaBuku != ""; j++ {
-				T[j].kodeBuku = j + 1
-			}
-			if i != NMAX-1 {
-				T[i].kodeBuku = NMAX - 1
-			}
 		}
 	}
 
@@ -197,21 +253,22 @@ func cetakBook(T arrPerpus) {
 }
 
 func SearchCategory(T arrPerpus, kategori string) {
-	var i int = 0
 	var found bool = false
-	if T[i].kodeBuku == 0 {
+
+	if T[0].kodeBuku == 0 {
 		fmt.Println("Maaf anda belum menambahkan buku")
 		return
-	} else {
-		for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
-			if kategori == T[i].kategori {
-				fmt.Println("Judul:", T[i].namaBuku, "Kategori:", T[i].kategori, "ID:", T[i].kodeBuku)
-				found = true
-			}
+	}
+
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
+		if kategori == T[i].kategori {
+			fmt.Println("Judul:", T[i].namaBuku, "Kategori:", T[i].kategori, "ID:", T[i].kodeBuku)
+			found = true
 		}
-		if !found {
-			fmt.Println("Maaf, kami tidak dapat menemukan kategori yang Anda cari.")
-		}
+	}
+
+	if !found {
+		fmt.Println("Maaf, kami tidak dapat menemukan kategori yang Anda cari.")
 	}
 }
 
@@ -221,6 +278,7 @@ func borrowOrReturnBook(T *arrPerpus) {
 	fmt.Println("Borrow or Return Book")
 	fmt.Println("1. Borrow Book")
 	fmt.Println("2. Return Book")
+	fmt.Println("3. Return to menu")
 	fmt.Println("= = = = =")
 
 	fmt.Scanln(&input)
@@ -231,6 +289,8 @@ func borrowOrReturnBook(T *arrPerpus) {
 		borrowBook(T, input)
 	} else if input == 2 {
 		returnBook(T)
+	} else if input == 3 {
+		return
 	} else {
 		fmt.Println("= = = = =")
 		fmt.Println("Maaf, pilihan tidak valid. Silakan pilih nomor dari menu.")
@@ -258,7 +318,7 @@ func borrowBook(T *arrPerpus, id int) {
 				fmt.Println("= = = = =")
 				fmt.Println("Buku tidak dapat dipinjam karena sedang dipinjam.")
 			}
-			break
+			return
 		}
 	}
 	if !found {
@@ -269,12 +329,13 @@ func borrowBook(T *arrPerpus, id int) {
 
 func returnBook(T *arrPerpus) {
 	var input int
+	var tempTglKembali int
+	var found bool = false
 
 	fmt.Println("= = = = =")
 	fmt.Print("Masukan ID buku yang dikembalikan: ")
 	fmt.Scanln(&input)
 
-	var found bool = false
 	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].kodeBuku == input {
 			found = true
@@ -283,10 +344,9 @@ func returnBook(T *arrPerpus) {
 
 				fmt.Println("= = = = =")
 				fmt.Print("Tanggal kembali (ddmmyyyy): ")
-				var tglKembali int
-				fmt.Scanln(&tglKembali)
+				fmt.Scanln(&tempTglKembali)
 
-				daysLate := (tglKembali - T[i].peminjaman.tglKembali) / 10000
+				daysLate := (tempTglKembali - T[i].peminjaman.tglKembali) / 10000
 				if daysLate > 0 {
 					// Calculate late return fine
 					fine := daysLate * 2000
@@ -299,7 +359,7 @@ func returnBook(T *arrPerpus) {
 				fmt.Println("= = = = =")
 				fmt.Println("Buku sedang tidak dipinjam.")
 			}
-			break
+			return
 		}
 	}
 	if !found {
@@ -317,27 +377,26 @@ func listBorrowed(T arrPerpus) {
 }
 
 func popularBooks(T arrPerpus) {
-	var popBooks [5]book
 	var i, j int
+	var maxIndex int
 
-	// Sort the books by count (most borrowed first)
+	// Sort the books by count (most borrowed first) using selection sort
 	for i = 0; i < NMAX-1; i++ {
-		for j = 0; j < NMAX-i-1; j++ {
-			if T[j].peminjaman.count < T[j+1].peminjaman.count {
-				T[j], T[j+1] = T[j+1], T[j]
+		maxIndex = i
+		for j = i + 1; j < NMAX; j++ {
+			if T[j].peminjaman.count > T[maxIndex].peminjaman.count {
+				maxIndex = j
 			}
 		}
-	}
-
-	// Get the top 5 most popular books
-	for i = 0; i < 5; i++ {
-		popBooks[i] = T[i]
+		if i != maxIndex {
+			T[i], T[maxIndex] = T[maxIndex], T[i]
+		}
 	}
 
 	// Print the popular books
 	fmt.Println("5 buku paling populer:")
 	for i = 0; i < 5; i++ {
-		fmt.Println(i+1, ". Judul:", popBooks[i].namaBuku, "Jumlah peminjaman:", popBooks[i].peminjaman.count)
+		fmt.Println(i+1, T[i].namaBuku)
 	}
 }
 
@@ -382,7 +441,8 @@ func menu() {
 			popularBooks(T1)
 		} else if input == 7 {
 			fmt.Println("= = = = =")
-			fmt.Println("Terima kasih telah menggunakan layanan perpustakaan kami.")
+			fmt.Println("Go To Sleep Please")
+			fmt.Println("= = = = =")
 			return
 		} else {
 			fmt.Println("= = = = =")

@@ -20,6 +20,7 @@ This project is licensed under the Imagine Dragons License. All jokes aside www
 
 ## Notes for this stuff
 
-use binary search? ionknow what i can use for this? i only use a linear search rather than a book name
+used a sequential search on the category search
+and used a selection sort for the popular books
 
 i just wanna sleep

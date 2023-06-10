@@ -18,7 +18,6 @@ type borrowed struct {
 	tglPinjam    int
 	tglKembali   int
 }
-
 type arrPerpus [NMAX]book
 
 func manageBooks(T *arrPerpus) {
@@ -238,7 +237,6 @@ func cetakBook(T arrPerpus) {
 		fmt.Printf("Judul: %s Kategori: %s ID: %d\n", T[i].namaBuku, T[i].kategori, T[i].kodeBuku)
 	}
 
-	fmt.Println("= = = = =")
 	if T[0].namaBuku == "" {
 		fmt.Println("Tidak ada buku yang tersedia")
 	}
@@ -270,7 +268,8 @@ func borrowOrReturnBook(T *arrPerpus) {
 	fmt.Println("Borrow or Return Book")
 	fmt.Println("1. Borrow Book")
 	fmt.Println("2. Return Book")
-	fmt.Println("3. Return to menu")
+	fmt.Println("3. Remove borrower data")
+	fmt.Println("4. Return to menu")
 	fmt.Println("= = = = =")
 
 	fmt.Scanln(&input)
@@ -282,6 +281,10 @@ func borrowOrReturnBook(T *arrPerpus) {
 	} else if input == 2 {
 		returnBook(T)
 	} else if input == 3 {
+		fmt.Println("Input Book ID")
+		fmt.Scanln(&input)
+		deleteBorrowedBook(T, input)
+	} else if input == 4 {
 		return
 	} else {
 		fmt.Println("= = = = =")
@@ -291,6 +294,8 @@ func borrowOrReturnBook(T *arrPerpus) {
 
 func borrowBook(T *arrPerpus, id int) {
 	var found bool = false
+	var tglPinjam int
+
 	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].kodeBuku == id {
 			found = true
@@ -301,10 +306,10 @@ func borrowBook(T *arrPerpus, id int) {
 				fmt.Print("Nama peminjam: ")
 				fmt.Scanln(&T[i].peminjaman.namaPeminjam)
 				fmt.Print("Tanggal pinjam (ddmmyyyy): ")
-				var tglPinjam int
 				fmt.Scanln(&tglPinjam)
+
 				T[i].peminjaman.tglPinjam = tglPinjam
-				T[i].peminjaman.tglKembali = tglPinjam + 70000 // borrow for 7 days (70000 = 7 * 10000)
+				T[i].peminjaman.tglKembali = tglPinjam + 7
 				fmt.Println("Buku berhasil dipinjam.")
 			} else {
 				fmt.Println("= = = = =")
@@ -360,11 +365,30 @@ func returnBook(T *arrPerpus) {
 	}
 }
 
+func deleteBorrowedBook(T *arrPerpus, id int) {
+	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
+		if T[i].kodeBuku == id && T[i].peminjaman.pinjam == true {
+			T[i].peminjaman.namaPeminjam = ""
+			T[i].peminjaman.count--
+			T[i].peminjaman.pinjam = false
+			T[i].peminjaman.tglPinjam = 0
+			fmt.Println("Data peminjam dihapus.")
+			return
+		}
+	}
+
+	fmt.Println("ID buku tidak ditemukan atau buku tidak sedang dipinjam.")
+}
+
 func listBorrowed(T arrPerpus) {
+	found := false
 	for i := 0; i < NMAX && T[i].namaBuku != ""; i++ {
 		if T[i].peminjaman.pinjam == true {
-			fmt.Println("Judul:", T[i].namaBuku, "Dipinjam oleh:", T[i].peminjaman.namaPeminjam, "Dengan ID buku: ", T[i].kodeBuku, "Pada: ", T[i].peminjaman.tglPinjam)
+			fmt.Println("Buku:", T[i].namaBuku, "Dengan ID:", T[i].kodeBuku, "Dipinjam Oleh:", T[i].peminjaman.namaPeminjam)
 		}
+	}
+	if !found {
+		fmt.Println("Tidak ada buku yang sedang dipinjam.")
 	}
 }
 

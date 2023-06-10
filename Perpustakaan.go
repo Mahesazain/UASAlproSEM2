@@ -24,7 +24,6 @@ type arrPerpus [NMAX]book
 func manageBooks(T *arrPerpus) {
 	var input int
 
-	fmt.Println("= = = = =")
 	fmt.Println("Manage Books")
 	fmt.Println("1. Add Book")
 	fmt.Println("2. Edit Book")
@@ -207,10 +206,9 @@ func SearchCategory(T arrPerpus, kategori string) {
 	}
 }
 
-func borrowOrReturnBook(T *arrPerpus, id int) {
+func borrowOrReturnBook(T *arrPerpus) {
 	var input int
 
-	fmt.Println("= = = = =")
 	fmt.Println("Borrow or Return Book")
 	fmt.Println("1. Borrow Book")
 	fmt.Println("2. Return Book")
@@ -219,7 +217,9 @@ func borrowOrReturnBook(T *arrPerpus, id int) {
 	fmt.Scanln(&input)
 
 	if input == 1 {
-		borrowBook(T, id)
+		fmt.Println("Input Book ID")
+		fmt.Scanln(&input)
+		borrowBook(T, input)
 	} else if input == 2 {
 		returnBook(T)
 	} else {
@@ -239,7 +239,7 @@ func borrowBook(T *arrPerpus, id int) {
 				fmt.Println("= = = = =")
 				fmt.Print("Nama peminjam: ")
 				fmt.Scanln(&T[i].peminjaman.namaPeminjam)
-				fmt.Print("Jumlah hari pinjam: ")
+				fmt.Print("Jumlah hari buku yang akan dipinjam: ")
 				fmt.Scanln(&T[i].peminjaman.tglPinjam)
 				fmt.Println("Buku berhasil dipinjam.")
 			} else {
@@ -276,9 +276,9 @@ func returnBook(T *arrPerpus) {
 
 				T[i].peminjaman.tglKembali = T[i].peminjaman.tglPinjam + daysLate
 
-				if T[i].peminjaman.tglKembali > T[i].peminjaman.tglPinjam+7 {
+				if T[i].peminjaman.tglKembali > T[i].peminjaman.tglPinjam+2 {
 					// Calculate late return fine
-					fine := (T[i].peminjaman.tglKembali - (T[i].peminjaman.tglPinjam + 7)) * 2000
+					fine := (T[i].peminjaman.tglKembali - (T[i].peminjaman.tglPinjam + 2)) * 2000
 					fmt.Println("Denda keterlambatan:", fine)
 				}
 				fmt.Println("Terima kasih telah mengembalikan bukunya.")
@@ -360,9 +360,7 @@ func menu() {
 			SearchCategory(T1, masukan)
 		} else if input == 4 {
 			fmt.Println("= = = = =")
-			fmt.Print("Masukan ID buku: ")
-			fmt.Scanln(&input)
-			borrowOrReturnBook(&T1, input)
+			borrowOrReturnBook(&T1)
 		} else if input == 5 {
 			fmt.Println("= = = = =")
 			listBorrowed(T1)
